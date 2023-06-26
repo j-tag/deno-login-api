@@ -57,9 +57,14 @@ curl -X POST http://localhost:8000/register \
 Run backend while developing using:
 
 [source, bash]
-deno run --allow-net ./index.js
+deno run --allow-net --allow-env ./index.js
 
 Compile for Windows:
 
 [source, bash]
-deno compile --allow-net --target=x86_64-pc-windows-msvc ./index.js
+deno compile --allow-net --allow-env --target=x86_64-pc-windows-msvc ./index.js
+
+For running tests you need to set a value for `TESTING` environment variable. (e.g. `true`) and then run Deno with `test` command:
+
+[source, bash]
+deno test --allow-net --allow-env ./index.js

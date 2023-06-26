@@ -1,4 +1,5 @@
-import {Application, Router} from "https://deno.land/x/oak/mod.ts";
+import {Application, Router} from "https://deno.land/x/oak@v12.5.0/mod.ts";
+import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
 
 const users = [
     {username: "akbar", password: "12345"},
@@ -40,6 +41,7 @@ router
             // Set failed result
             context.response.body = {result: "failed"};
         } else {
+            // Add user to list of users
             users.push({username, password})
             console.log("New user created!");
             // Set successful result
@@ -60,4 +62,29 @@ app.addEventListener("listen", ({hostname, port, secure}) => {
     )
 })
 
-await app.listen({port: 8000})
+// If we are not in test mode, run server
+if(!Deno.env.get("TESTING")) {
+    await app.listen({port: 8000})
+}
+
+// Send simple GET request
+Deno.test("it should support the Oak framework", async () => {
+    const request = await superoak(app);
+    await request.get("/").expect("Welcome to login API server!");
+});
+
+Deno.test("it should have Akbar user", async () => {
+    const request = await superoak(app);
+    await request.post("/login")
+        .set("Content-Type", "application/json")
+        .send('{"username":"akbar", "password": "12345"}')
+        .expect('{"result":"ok"}');
+});
+
+Deno.test("it should NOT have Hesam user", async () => {
+    const request = await superoak(app);
+    await request.post("/login")
+        .set("Content-Type", "application/json")
+        .send('{"username":"hesam", "password": "12345"}')
+        .expect('{"result":"failed"}');
+});
