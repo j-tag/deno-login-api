@@ -1,0 +1,65 @@
+= Login API
+
+Simple login API using Deno oak framework.
+
+== Start Backend
+
+Simply double-click on `login-api.exe` file. The backend API will listen on `http://localhost:8000`.
+
+== Endpoints
+
+* The login endpoint is at `http://localhost:8000/login`.
+* The register endpoint is at `http://localhost:8000/register`.
+
+== Available Users
+
+There are two users available:
+
+user 1:
+
+`username`: `akbar`
+
+`password`: `12345`
+
+user 2:
+
+`username`: `asghar`
+
+`password`: `asghar2020`
+
+== API Example
+
+You can test API using JSON.
+
+Login:
+
+[source, bash]
+----
+curl -X POST http://localhost:8000/login \
+           -H 'Content-Type: application/json' \
+           -H 'Accept: application/json' \
+           -d '{"username":"akbar", "password": "12345"}'
+----
+
+Register:
+
+[source, bash]
+----
+curl -X POST http://localhost:8000/register \
+           -H 'Content-Type: application/json' \
+           -H 'Accept: application/json' \
+           -d '{"username":"hesam", "password": "12345"}'
+
+----
+
+== Developing Backend
+
+Run backend while developing using:
+
+[source, bash]
+deno run --allow-net ./index.js
+
+Compile for Windows:
+
+[source, bash]
+deno compile --allow-net --target=x86_64-pc-windows-msvc ./index.js
